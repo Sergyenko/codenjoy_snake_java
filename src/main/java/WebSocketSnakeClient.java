@@ -1,18 +1,19 @@
+import java.io.IOException;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketClient;
 import org.eclipse.jetty.websocket.WebSocketClientFactory;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 public class WebSocketSnakeClient {
 
-    private static final String SERVER = "ws://localhost:8080/codenjoy-contest/ws";
+//    private static final String SERVER = "ws://localhost:8080/codenjoy-contest/ws";
+	private static final String SERVER = "ws://172.16.101.141:8080/codenjoy-contest/ws";
 
-    private static String userName = "sergey@epam.com";
+    private static String userName = "amogh@epam.com";
 
     private static WebSocketSnakeClient client;
 
@@ -59,13 +60,19 @@ public class WebSocketSnakeClient {
             }
 
             public void onMessage(String data) {
-                System.out.println("data = " + data);
-                String answer = solver.answer();
+            	data = new String(data.getBytes(StandardCharsets.UTF_8), Charset.forName(StandardCharsets.UTF_8.toString()));
+            	System.out.println("data = " + data);
+                String answer = solver.answer(data);
                 try {
                     connection.sendMessage(answer);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+
+            private int getX() {
+            	
+            	return 0;
             }
         }).get(5000, TimeUnit.MILLISECONDS);
     }
